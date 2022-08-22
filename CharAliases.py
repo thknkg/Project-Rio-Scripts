@@ -1,5 +1,7 @@
 from collections import defaultdict
 
+# take user input, including aliases and convert to character id number / "proper name" as stored in detailed_stats, etc.
+
 # dict of character aliases and corresponding character ID
 cCHAR_ALIASES = {
     'mario': 0,
