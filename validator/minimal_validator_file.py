@@ -99,6 +99,8 @@ try:
                     last_event = events[-1]
                     if event["Event Num"] != last_event["Event Num"]:
                         next_event = events[event["Event Num"] + 1]
+                    else:
+                        continue
 
                     # ====HALF INNING TRANSITIONS====
                     # determine if the game correctly transitions between half innings when 3 outs are reached
