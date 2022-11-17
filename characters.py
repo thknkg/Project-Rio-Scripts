@@ -237,6 +237,7 @@ aliases = {
     'wingombo': 41,
     'parag': 41,
     'pg': 41,
+    'fpt': 41
     'koopa(r)': 42,
     'koopa': 42,
     'koopatroopa': 42,
@@ -283,7 +284,9 @@ aliases = {
     'blackshyguy': 47,
     'blackguy': 47,
     'blsg': 47,
+    'bksg': 47,
     'blshyguy': 47,
+    'blkshyguy': 47,
     'drybones(gy)': 48,
     'drybones': 48,
     'bones': 48,
