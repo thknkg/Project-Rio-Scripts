@@ -1,6 +1,8 @@
 import json
 from glob import glob
 
+#### check statfiles to make sure that they are being produced correctly ####
+
 # TODO make sure that all the looping through events happens at once if possible, not several loops
 # ====INITIAL SETUP====
 # for opening local file for easy testing
