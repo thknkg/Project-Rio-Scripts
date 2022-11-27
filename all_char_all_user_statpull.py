@@ -1,4 +1,5 @@
 import requests
+import csv
 
 print("Enter '0' for stars-off data; '1' for stars-on")
 stars = int(input())
@@ -6,10 +7,10 @@ print("Enter '0' for all data, '1' for ranked only")
 ranked = int(input())
 
 """
-pulls basic data from RioWeb API for everyone, by character and overall
+pulls basic data from RioWeb API for everyone, by character and overall, and exports to csv file
 """
 
-# todo have the output be saved in a csv file
+
 
 url = "https://projectrio-api-1.api.projectrio.app/detailed_stats/?exclude_pitching=1&exclude_fielding=1&exclude_misc=1&by_char=1&by_user=1"
 era_multiplier = 9
@@ -24,6 +25,12 @@ if ranked == 1:
 
 response = requests.get(url).json()
 char_stats = response["Stats"]
+
+header = ['user', 'character', 'pa', 'avg', 'obp', 'slg', 'ops', 'hr', 'hr rate', 'rbi', 'ab']
+
+with open('file.csv', 'a', encoding='UTF8') as f:
+    writer = csv.writer(f)
+    writer.writerow(header)
 
 print("user, " + "character, " + "pa, " + "avg, " + "obp, " + "slg, " + "ops, " + "hr, " + "hr rate, " + "rbi, " + "ab")
 for user in char_stats:
@@ -68,9 +75,15 @@ for user in char_stats:
             if pa > 0:
                 print(user + ", " + char + ", " + "{:.0f}".format(pa) + ", " + "{:.3f}".format(avg) + ", " + "{:.3f}".format(obp) + ", " + "{:.3f}".format(slg) + ", " + "{:.3f}".format(ops) + ", " + "{:.0f}".format(char_stats["summary_homeruns"]) + ", " + "{:.1f}".format(char_stats["summary_homeruns"]/char_stats["summary_at_bats"]*100) + ", " + "{:.0f}".format(char_stats["summary_rbi"]) + ", " + "{:.0f}".format(char_stats["summary_at_bats"]))
 
-    avg = char_stats["summary_hits"] / char_stats["summary_at_bats"]
-    pa = char_stats["summary_at_bats"] + char_stats["summary_walks_hbp"] + char_stats["summary_walks_bb"] + char_stats["summary_sac_flys"]
-    obp = (char_stats["summary_hits"] + char_stats["summary_walks_hbp"] + char_stats["summary_walks_bb"]) / pa
-    slg = (char_stats["summary_singles"] + (char_stats["summary_doubles"] * 2) + (char_stats["summary_triples"] * 3) + ( char_stats["summary_homeruns"] * 4)) / char_stats["summary_at_bats"]
-    ops = obp + slg
-    print(user + ", Overall," + "{:.3f}".format(avg) + "," + "{:.3f}".format(obp) + "," + "{:.3f}".format(slg) + "," + "{:.1f}".format(ops))
+    data = [user, char, pa, avg, obp, slg, ops, user_summary_homeruns, user_summary_homeruns / user_summary_at_bats,
+            user_summary_rbi, user_summary_at_bats]
+
+    with open('file.csv', 'a', encoding='UTF8') as f:
+        writer = csv.writer(f)
+        writer.writerow(data)
+avg = char_stats["summary_hits"] / char_stats["summary_at_bats"]
+pa = char_stats["summary_at_bats"] + char_stats["summary_walks_hbp"] + char_stats["summary_walks_bb"] + char_stats["summary_sac_flys"]
+obp = (char_stats["summary_hits"] + char_stats["summary_walks_hbp"] + char_stats["summary_walks_bb"]) / pa
+slg = (char_stats["summary_singles"] + (char_stats["summary_doubles"] * 2) + (char_stats["summary_triples"] * 3) + ( char_stats["summary_homeruns"] * 4)) / char_stats["summary_at_bats"]
+ops = obp + slg
+print(user + ", Overall," + "{:.3f}".format(avg) + "," + "{:.3f}".format(obp) + "," + "{:.3f}".format(slg) + "," + "{:.1f}".format(ops))

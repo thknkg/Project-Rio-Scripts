@@ -237,7 +237,7 @@ aliases = {
     'wingombo': 41,
     'parag': 41,
     'pg': 41,
-    'fpt': 41
+    'fpt': 41,
     'koopa(r)': 42,
     'koopa': 42,
     'koopatroopa': 42,

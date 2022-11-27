@@ -2,6 +2,12 @@ from glob import glob
 import json
 from math import sqrt
 
+for f_name in glob('*.json'):
+    if f_name in glob('decoded.*'):
+        with open(f_name) as json_file:
+            stat_file = json.load(json_file)
+            sf = stat_file
+
 
 def PosDistance(event, position, x, y , z):
     for event in file["Events"]:
