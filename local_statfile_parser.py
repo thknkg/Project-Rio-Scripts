@@ -4,8 +4,7 @@ from glob import glob
 
 def specify_user():
     """specify username"""
-    # user = input("Enter player name: ")
-    user = "MORI"
+    user = input("Enter player name: ")
     if user == "":
         user = None
     return user
@@ -37,11 +36,13 @@ def home_or_away(file, user):
 
 
 def open_local_files():
+    # get username
     user = specify_user()
+    
     # open json files and organize them
     character_dict = {}
-    # file_count = 0
     events = {}
+    
     # open files
     game_id_list = []
     for f_name in glob('*.json'):
@@ -50,19 +51,20 @@ def open_local_files():
                 stat_file = json.load(json_file)
                 sf = stat_file
                 game_id_list.append(sf["GameID"])
+                
                 # stars on or stars off
                 stars_on = 0
                 for character in sf["Character Game Stats"].values():
                     if character["Superstar"] == 1:
                         stars_on = 1
-
+                        
+                # assign user team
                 if user is not None:
                     team_id = home_or_away(sf, user)
 
-                game_information = {}
-
                 # automate creation of variables for statfiles
                 count = 0
+                game_information = {}
 
                 # overall stat file dictionary
                 stat_file_dict = {}
@@ -74,7 +76,7 @@ def open_local_files():
                         game_information[key] = value
                     count += 1
 
-                # defining variables for summary and event stats for easier access
+                # defining variables for summary and event stats
                 for character in stat_file_dict["Character Game Stats"].values():
                     char_name = character["CharID"]
 
@@ -87,7 +89,7 @@ def open_local_files():
                                     pass
 
                     def stat_collect(dict_for_chars, chars):
-                        """iterate through characters and add them to the dictionary to compile stats"""
+                        """iterate through characters and add them to the dictionary to compile offensive and defensive stats"""
                         if char_name not in dict_for_chars:
                             dict_for_chars[char_name] = {}
                             dict_for_chars[char_name]["Offensive Stats"] = chars["Offensive Stats"]
@@ -109,7 +111,8 @@ def open_local_files():
                             add_offensive_defensive(dict_for_chars, chars, char_name)
 
                     stat_collect(character_dict, character)
-
+                
+                # add events to dict
                 events[sf["GameID"]] = stat_file_dict["Events"]
 
     # create a dictionary to return
@@ -119,7 +122,8 @@ def open_local_files():
         dict_for_return["character_stats"][char] = {"summary_def":{}, "summary_off":{}}
         dict_for_return["character_stats"][char]["summary_def"] = character_dict[char]["Defensive Stats"]
         dict_for_return["character_stats"][char]["summary_off"] = character_dict[char]["Offensive Stats"]
-
+        
+    # return dict
     return dict_for_return
 
 
@@ -133,20 +137,23 @@ def organize_character_statdict(stat_dict):
     return char_dict
 
 
-x = open_local_files()
-print(organize_character_statdict(x))
-print(x.keys())
-print(x['events'].keys())
-print(x['character_stats']['Boo'])
+# x = open_local_files()
+# print(organize_character_statdict(x))
+# print(x.keys())
+# print(x['events'].keys())
+# print(x['character_stats']['Boo'])
 
 # todo by stadium, opponent, more finely organize data into smaller categories so that accessing dict in manner like below isn't needed
-avg = x["character_stats"]["Boo"]["summary_def"]["Strikeouts"] / x["character_stats"]["Boo"]["summary_def"]["Batters Faced"]
+# avg = x["character_stats"]["Boo"]["summary_def"]["Strikeouts"] / x["character_stats"]["Boo"]["summary_def"]["Batters Faced"]
 
-print(f"{str(round(avg * 100, 2))}%")
+# print(f"{str(round(avg * 100, 2))}%")
 
-"""def offensive_stats(stat_dict): # a start to adding stats into the auto generation as well for char, 
-stat in stat_dict["summary_off"].items(): pa = stat["At Bats"] + stat["Walks (4 Balls)"] + stat["Walks (Hit)"] + 
-stat["Sac Flys"] avg = round(stat["Hits"] / stat["At Bats"], 3) obp = round((stat["Hits"] + stat["Walks (4 Balls)"] + 
-stat["Walks (Hit)"]) / pa, 3) slg = round((stat["Singles"] + (stat["Doubles"] * 2) + (stat["Triples"] * 3) + (stat[
-"Homeruns"] * 4)) / stat["At Bats"], 3) ops = round(obp + slg, 3) print(char, "(" + str(pa) + " PA)", "/", 
-"{:.3f}".format(avg), "/", "{:.3f}".format(obp), "/", "{:.3f}".format(slg), "/", "{:.3f}".format(ops)) """
+def offensive_stats(stat_dict): 
+    """a start to adding stats into the auto generation as well""" 
+    for char, stat in stat_dict["summary_off"].items(): 
+        pa = stat["At Bats"] + stat["Walks (4 Balls)"] + stat["Walks (Hit)"] + stat["Sac Flys"] 
+        avg = round(stat["Hits"] / stat["At Bats"], 3) 
+        obp = round((stat["Hits"] + stat["Walks (4 Balls)"] + stat["Walks (Hit)"]) / pa, 3) 
+        slg = round((stat["Singles"] + (stat["Doubles"] * 2) + (stat["Triples"] * 3) + (stat["Homeruns"] * 4)) / stat["At Bats"], 3) 
+        ops = round(obp + slg, 3) 
+        print(char, "(" + str(pa) + " PA)", "/", "{:.3f}".format(avg), "/", "{:.3f}".format(obp), "/", "{:.3f}".format(slg), "/", "{:.3f}".format(ops))
