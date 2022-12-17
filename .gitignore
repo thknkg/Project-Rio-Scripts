@@ -1,0 +1,13 @@
+
+to be sorted/scratch_6.py
+to be sorted/list_grabber.py
+to be sorted/json_validation.py
+bot/helpers/__init__.py
+bot/helpers/ImageBuilder.py
+bot/helpers/TeamSort.py
+bot/random_cog.py
+bot/randomizers/__init__.py
+bot/randomizers/RandomBaseball.py
+bot/randomizers/RandomEnums.py
+bot/randomizers/RandomFunctions.py
+open_local_statfiles.py
