@@ -1,17 +1,14 @@
 import RioStatLib
 import json
 from glob import glob
+
 """just revised from MattGree's version that reads a single file to iterate over all files in a directory"""
-file = str(input("Enter File Path: "))
 for f_name in glob('*.json'):
     if f_name in glob('decoded.*'):
         with open(f_name) as json_file:
             stat_file = json.load(json_file)
             sf = stat_file
             myStats = RioStatLib.StatObj(stat_file)
-# with open(file, "r") as test:
-#     jsonObj = json.load(test)
-#     myStats = RioStatLib.StatObj(jsonObj)
 
             all_events = myStats.events()
             star_chance_opportunity = 0
