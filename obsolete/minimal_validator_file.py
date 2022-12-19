@@ -1,8 +1,6 @@
 import json
 from glob import glob
 
-#### check statfiles to make sure that they are being produced correctly ####
-
 # TODO make sure that all the looping through events happens at once if possible, not several loops
 # ====INITIAL SETUP====
 # for opening local file for easy testing
@@ -101,8 +99,6 @@ try:
                     last_event = events[-1]
                     if event["Event Num"] != last_event["Event Num"]:
                         next_event = events[event["Event Num"] + 1]
-                    else:
-                        continue
 
                     # ====HALF INNING TRANSITIONS====
                     # determine if the game correctly transitions between half innings when 3 outs are reached
@@ -113,7 +109,6 @@ try:
                                     event["Event Num"]) + " and " + str(next_event["Event Num"]))
                     except KeyError:
                         print("Error: one of Outs or Num Outs During Play returned a key error.")
-
 
                     # ====END OF GAME====
                     # standard end of game

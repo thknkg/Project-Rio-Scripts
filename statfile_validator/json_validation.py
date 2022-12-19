@@ -1,10 +1,10 @@
 from glob import glob
 import json
-
+"""iterate through statfiles and indicate discrepancies as compared to the schema"""
 import jsonschema
 
 error_summary = []
-with open('jsonschema.json') as f:
+with open(r'C:\Users\micah\Documents\GitHub\Project-Rio-Scripts\statfile_validator\jsonschema.json') as f:
     schema = json.load(f)
 for f_name in glob('*.json'):
     if f_name in glob('decoded.*'):
